@@ -2,6 +2,8 @@ const mongoose=require('mongoose');
 const validator=require('validator'); 
 const { default: slugify } = require('slugify');
 
+
+// schema for the courses 
 const courseSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -36,6 +38,7 @@ const courseSchema=new mongoose.Schema({
 });
 
 
+// document middleware which will execute just before saving the document to the database
 courseSchema.pre('save',function(next){
     this.slug=slugify(this.name,{lower:true});
     next();
