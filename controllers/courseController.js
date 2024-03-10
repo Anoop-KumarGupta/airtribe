@@ -3,6 +3,8 @@ const Course=require('./../model/courseModel');
 const Registration=require('./../model/registrationModel');
 
 
+
+// function to get the list of all courses
 exports.getAllCourses=async (req,res)=>{
     try{
         const courses=await Course.find();
@@ -21,6 +23,8 @@ exports.getAllCourses=async (req,res)=>{
     }
 };
 
+
+// function to create a course
 exports.createCourse=async (req,res)=>{
     try{
         const newCourse=await Course.create({
@@ -45,6 +49,7 @@ exports.createCourse=async (req,res)=>{
 };
 
 
+// for finding or getting the details of only one course
 exports.getCourse=async(req,res,next)=>{
     try{
         const course=await Course.findById(req.params.id).populate('owner');
@@ -61,6 +66,8 @@ exports.getCourse=async(req,res,next)=>{
         })
     }
 };
+
+// function for updating the course details
 exports.updateCourse=async (req,res)=>{
     try{
         const course=await Course.findByIdAndUpdate(req.params.id,req.body,{
@@ -82,6 +89,8 @@ exports.updateCourse=async (req,res)=>{
 };
 
 
+
+// function to delete a particular course from the database
 exports.deleteCourse=async(req,res)=>{
     try{
         await Course.findByIdAndDelete(req.params.id);
@@ -97,6 +106,8 @@ exports.deleteCourse=async(req,res)=>{
     }
 }
 
+
+// registration functionality for the students, so they can register for a particular course using their name, email, phone no, etc.
 exports.registerForCourse=async(req,res)=>{
     try{
         const course=await Course.findById(req.params.id);
@@ -127,7 +138,7 @@ exports.registerForCourse=async(req,res)=>{
 }
 
 
-
+// getting list of all leads or can say students
 exports.getAllLeads = async (req, res) => {
     try {
         const course = await Course.findById(req.params.id);
@@ -152,7 +163,7 @@ exports.getAllLeads = async (req, res) => {
     }
 };
 
-
+// comment functionality for the instructor.
 exports.addComment=async(req,res)=>{
     try {
         const course = await Course.findById(req.params.id);
@@ -169,7 +180,7 @@ exports.addComment=async(req,res)=>{
     }
 }
 
-
+// function to update the status of students registration form
 exports.updateStatus=async(req,res)=>{
     try {
         await Course.updateOne(
