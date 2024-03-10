@@ -2,6 +2,8 @@ const Instructor=require('./../model/instructorModel');
 const jwt=require('jsonwebtoken');
 const {promisify}=require('util');
 
+
+// creating a sign token, which is one part jwt and the other is verification.
 const signToken=(id)=>{
     return jwt.sign({id},process.env.JWT_SECRET,{
         expiresIn:process.env.JWT_EXPIRES_IN
@@ -9,6 +11,8 @@ const signToken=(id)=>{
 }
 
 
+// creating the signup functionality, this function takes the data from the req.body and create a new document
+// and token for login purpose and return newly created document
 exports.signup=async(req,res,next)=>{
     try{
         const newInstructor=await Instructor.create(req.body);
@@ -28,6 +32,8 @@ exports.signup=async(req,res,next)=>{
     }
 }
 
+
+// creating login functionality using email and password from the req.body, if correct credentials entered then user will be login else give an error message
 exports.login=async(req,res,next)=>{
     try{
         const {email,password}=req.body;
@@ -53,7 +59,7 @@ exports.login=async(req,res,next)=>{
     }
 };
 
-
+// protecting certain routes, so that only authenticated users can access the particular resource.
 exports.protect=async (req,res,next)=>{
     //1) getting token and check of it's there
     let token;
@@ -87,6 +93,9 @@ exports.protect=async (req,res,next)=>{
     next();
 }
 
+
+
+// creating this function to restrict the users, so that they can only access the resource which is meant for them.
 exports.restricTo=(...roles)=>{
     return (req,res,next)=>{
         if(!roles.includes(req.user.role)){
