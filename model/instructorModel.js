@@ -2,6 +2,8 @@ const mongoose=require('mongoose');
 const validator=require('validator');
 const bcrypt=require('bcryptjs');
 
+
+// schema for users --> there are two different types of users, one is instructor and other one is student. role property in the schema is used for distinguish between both
 const instructorSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -36,6 +38,8 @@ const instructorSchema=new mongoose.Schema({
         }
     }
 });
+
+// document middlewares------------------------
 instructorSchema.pre('save', function(next) {
     if (this.role === 'student') {
         this.teachingExperience = undefined;
@@ -50,9 +54,14 @@ instructorSchema.pre('save',async function(next){
     next();
 });
 
+
+// for loggin purpose, here we are comparing the entered password by user and the password which we have already. Since password stored is encrypted form so we cannot compare directly but use bcrypt 
 instructorSchema.methods.correctPassword=async function(candidatePassword,userPassword){
     return await bcrypt.compare(candidatePassword,userPassword);
 };
 
+// creating the model using instructorSchema
 const Instructor=mongoose.model('Instructor',instructorSchema);
+
+// exporting the model, so that it can be used in other files
 module.exports=Instructor;
